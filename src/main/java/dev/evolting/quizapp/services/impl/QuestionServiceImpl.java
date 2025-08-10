@@ -42,8 +42,9 @@ public class QuestionServiceImpl implements QuestionService {
     public ResponseEntity<String> addQuestion(Question question) {
         try{
             Boolean isAdded = questionRepository.save(question) != null;
-            return new ResponseEntity<>(isAdded ? "Question Added Successfully" : "Question Not Added"
-                    , isAdded ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
+            return isAdded ?
+                    new ResponseEntity<>("Question Added Successfully", HttpStatus.CREATED)
+                    : new ResponseEntity<>("Question Not Added", HttpStatus.BAD_REQUEST);
         } catch (Exception e){
             e.printStackTrace();
         }
