@@ -1,5 +1,6 @@
 package dev.evolting.quizapp.controllers;
 
+import dev.evolting.quizapp.dtos.QuestionDTO;
 import dev.evolting.quizapp.entities.Quiz;
 import dev.evolting.quizapp.services.QuizService;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,11 @@ public class QuizController {
     @GetMapping("{id}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable Integer id){
         return quizService.getQuizById(id);
+    }
+
+    @GetMapping("get-question/{id}")
+    public ResponseEntity<List<QuestionDTO>> getQuizQuestions(@PathVariable Integer id){
+        return quizService.getQuizQuestions(id);
     }
 
     @PostMapping

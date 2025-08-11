@@ -1,5 +1,6 @@
 package dev.evolting.quizapp.services.impl;
 
+import dev.evolting.quizapp.dtos.QuestionDTO;
 import dev.evolting.quizapp.entities.Question;
 import dev.evolting.quizapp.entities.Quiz;
 import dev.evolting.quizapp.repositories.QuestionRepository;
@@ -38,7 +39,6 @@ public class QuizServiceImpl implements QuizService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else return new ResponseEntity<>(quiz.get(), HttpStatus.OK);
-
     }
 
     @Override
@@ -53,5 +53,26 @@ public class QuizServiceImpl implements QuizService {
         return isAdded ?
                 new ResponseEntity<>("Quiz Added Successfully", HttpStatus.CREATED)
                 : new ResponseEntity<>("Quiz Not Added", HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<List<QuestionDTO>> getQuizQuestions(Integer id) {
+        Optional<Quiz> quiz = quizRepository.findById(id);
+        if (!quiz.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        for (Question question : quiz.get().getQuestions()) {
+            QuestionDTO questionDTO = new QuestionDTO();
+            questionDTO.setId(question.getId());
+            questionDTO.setQuestionTitle(question.getQuestionTitle());
+            questionDTO.setOption1(question.getOption1());
+            questionDTO.setOption2(question.getOption2());
+            questionDTO.setOption3(question.getOption3());
+            questionDTO.setOption4(question.getOption4());
+
+            questionDTOS.add(questionDTO);
+        }
+        return new ResponseEntity<>(questionDTOS, HttpStatus.OK);
     }
 }
