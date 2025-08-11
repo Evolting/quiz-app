@@ -3,6 +3,7 @@ package dev.evolting.quizapp.services.impl;
 import dev.evolting.quizapp.dtos.QuestionDTO;
 import dev.evolting.quizapp.entities.Question;
 import dev.evolting.quizapp.entities.Quiz;
+import dev.evolting.quizapp.entities.Response;
 import dev.evolting.quizapp.repositories.QuestionRepository;
 import dev.evolting.quizapp.repositories.QuizRepository;
 import dev.evolting.quizapp.services.QuizService;
@@ -74,5 +75,20 @@ public class QuizServiceImpl implements QuizService {
             questionDTOS.add(questionDTO);
         }
         return new ResponseEntity<>(questionDTOS, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Integer> calculateResult(Integer id, List<Response> responses) {
+        Quiz quiz = quizRepository.findById(id).get();
+        List<Question> questions = quiz.getQuestions();
+        int right = 0;
+        int i = 0;
+        for (Response response : responses) {
+            if(response.getResponse().equals(questions.get(i).getRightAnswer())){
+                right++;
+            }
+            i++;
+        }
+        return new ResponseEntity<>(right, HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package dev.evolting.quizapp.controllers;
 
 import dev.evolting.quizapp.dtos.QuestionDTO;
 import dev.evolting.quizapp.entities.Quiz;
+import dev.evolting.quizapp.entities.Response;
 import dev.evolting.quizapp.services.QuizService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,10 @@ public class QuizController {
     @PostMapping
     public ResponseEntity<String> createQuiz(@RequestParam String category, @RequestParam Integer numQ, @RequestParam String title){
         return quizService.addQuiz(category, numQ, title);
+    }
+
+    @PostMapping("submit/{id}")
+    public ResponseEntity<Integer> calculateResult(@PathVariable Integer id, @RequestBody List<Response> responses){
+        return quizService.calculateResult(id, responses);
     }
 }
